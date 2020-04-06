@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+using FoodAPI.Mapper;
 
 namespace FoodAPI
 {
@@ -31,6 +33,7 @@ namespace FoodAPI
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<ISandwitchRepository, SandwitchRepository>();
+            services.AddAutoMapper(typeof(SandwitchMappings));
             services.AddControllers();
         }
 
