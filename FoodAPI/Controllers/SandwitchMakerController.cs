@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FoodAPI.Models;
 using FoodAPI.Models.Dtos;
 using FoodAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
@@ -38,7 +39,7 @@ namespace FoodAPI.Controllers
             return Ok(objDto);
         }
 
-        [HttpGet("{sandwichId:int}")]
+        [HttpGet("{sandwichId:int}", Name = "GetSandwitch")]
         public IActionResult GetSandwich(int sandwichId) 
         {
             var obj = _sandwitchRepo.GetSandwitch(sandwichId);
@@ -54,7 +55,37 @@ namespace FoodAPI.Controllers
             
         }
 
-        
+        [HttpPost]
+        public IActionResult CreateSandwitch([FromBody] SandwichDto sandwichDto) 
+        {
+            if (sandwichDto == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (_sandwitchRepo.SandwitchExists(sandwichDto.SandwichName))
+            {
+                ModelState.AddModelError("", "This sandwitch is already exists!");
+                return StatusCode(404, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var sandwitchObj = _mapper.Map<Sandwich>(sandwichDto);
+
+            if (!_sandwitchRepo.CreateSandwitch(sandwitchObj))
+            {
+                ModelState.AddModelError("", $"Something went wrong when saving the record {sandwitchObj.SandwichName}");
+                return StatusCode(500, ModelState);
+            }
+
+            return CreatedAtRoute("GetSandwitch", new { sandwichId = sandwitchObj.ID }, sandwitchObj);
+
+
+        }
 
 
     }
