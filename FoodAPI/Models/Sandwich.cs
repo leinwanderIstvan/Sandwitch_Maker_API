@@ -13,11 +13,6 @@ namespace FoodAPI.Models
         public int Price { get; set; }
         [Required]
         public string SandwichName { get; set; }
-        [Required]
-        [StringLength(200)]
-        public string Ingredient { get; set; }
-        [Required]
-        [StringLength(200)]
-        public string Allergen { get; set; }
+        
     }
 }

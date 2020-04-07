@@ -87,6 +87,50 @@ namespace FoodAPI.Controllers
 
         }
 
+        [HttpPatch("{sandwichId:int}", Name = "UpdateSandwitch")]
+        public IActionResult UpdateSandwitch(int sandwitchId, [FromBody] SandwichDto sandwichDto)  
+        {
+            if (sandwichDto == null || sandwitchId !=  sandwichDto.ID)
+            {
+                return BadRequest(ModelState);
+            }
+
+            /*
+            if (_sandwitchRepo.SandwitchExists(sandwichDto.SandwichName))
+            {
+                ModelState.AddModelError("", "This sandwitch is already exists!");
+                return StatusCode(404, ModelState);
+            }*/
+
+            var sandwitchObj = _mapper.Map<Sandwich>(sandwichDto);
+
+            if (!_sandwitchRepo.UpdateSandwitch(sandwitchObj))
+            {
+                ModelState.AddModelError("", $"Something went wrong when update the record {sandwitchObj.SandwichName}");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{sandwichId:int}", Name = "DeleteSandwitch")]
+        public IActionResult DeleteSandwitch(int sandwichId)
+        {
+            if (!_sandwitchRepo.SandwitchExists(sandwichId))
+            {
+                return NotFound();
+            }
+
+            var sandwitchObj = _sandwitchRepo.GetSandwitch(sandwichId);
+
+            if (!_sandwitchRepo.DeleteSandwitch(sandwitchObj))
+            {
+                ModelState.AddModelError("", $"Something went wrong when delete the record {sandwitchObj.SandwichName}");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
 
     }
 }

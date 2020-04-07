@@ -10,13 +10,10 @@ namespace FoodAPI.Models.Dtos
     {
        
         public int ID { get; set; }
-        [Required]
+       
         public int Price { get; set; }
         [Required]
         public string SandwichName { get; set; }
-        [Required]
-        public string Ingredient { get; set; }
-        [Required]
-        public string Allergen { get; set; }
+        
     }
 }
