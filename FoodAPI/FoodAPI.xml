@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FoodAPI</name>
+    </assembly>
+    <members>
+        <member name="M:FoodAPI.Controllers.SandwitchMakerController.GetNationalParks">
+            <summary>
+            Get list of national parks
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FoodAPI.Controllers.SandwitchMakerController.GetSandwich(System.Int32)">
+            <summary>
+            Get individual national park
+            </summary>
+            <param name="sandwichId"> Id of national park</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

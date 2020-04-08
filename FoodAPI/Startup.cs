@@ -16,6 +16,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using FoodAPI.Mapper;
+using System.Reflection;
+using System.IO;
 
 namespace FoodAPI
 {
@@ -34,6 +36,19 @@ namespace FoodAPI
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<ISandwitchRepository, SandwitchRepository>();
             services.AddAutoMapper(typeof(SandwitchMappings));
+            services.AddSwaggerGen(options => {
+                options.SwaggerDoc("SandwitchOpenApiSpec", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "FoodMaker API",
+                    Version = "1"
+                });
+
+                var xmlCommnetFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var cmlCommentFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommnetFile);
+                options.IncludeXmlComments(cmlCommentFullPath);
+
+
+            }); 
             services.AddControllers();
         }
 
@@ -46,6 +61,13 @@ namespace FoodAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options => {
+                options.SwaggerEndpoint("/swagger/SandwitchOpenApiSpec/swagger.json", "FoodMaker API");
+                options.RoutePrefix = "";
+
+            });
 
             app.UseRouting();
 

@@ -15,7 +15,7 @@ namespace FoodAPI.Controllers
     [ApiController]
     public class SandwitchMakerController : Controller
     {
-        private ISandwitchRepository _sandwitchRepo;
+        private readonly ISandwitchRepository _sandwitchRepo;
         private readonly IMapper _mapper;
 
         public SandwitchMakerController(ISandwitchRepository sandwitchRepos, IMapper mapper)
@@ -24,6 +24,10 @@ namespace FoodAPI.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get list of national parks
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetNationalParks() 
         {
@@ -38,7 +42,11 @@ namespace FoodAPI.Controllers
 
             return Ok(objDto);
         }
-
+        /// <summary>
+        /// Get individual national park
+        /// </summary>
+        /// <param name="sandwichId"> Id of national park</param>
+        /// <returns></returns>
         [HttpGet("{sandwichId:int}", Name = "GetSandwitch")]
         public IActionResult GetSandwich(int sandwichId) 
         {
